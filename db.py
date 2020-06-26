@@ -49,9 +49,9 @@ class Db:
 
 
     # Get statuses
-    def get_statuses(self):
+    def get_statuses(self, all_except_first = False):
         with self.connection:
-            return self.cursor.execute("SELECT * FROM `statuses`").fetchall()
+            return self.cursor.execute("SELECT * FROM `statuses` WHERE `id` != ?", (all_except_first,)).fetchall()
 
     
     # Close connection with db
