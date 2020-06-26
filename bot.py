@@ -1,7 +1,7 @@
 import handlers
 
 from aiogram import executor
-from misc import dp
+from loader import dp
 
 
 if __name__ == '__main__':
