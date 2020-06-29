@@ -1,3 +1,3 @@
 from aiogram.utils.callback_data import CallbackData
 
-status_callback = CallbackData('user_id', 'status')
+status_callback = CallbackData('set_status', 'status_id', 'task_id', 'set_by')

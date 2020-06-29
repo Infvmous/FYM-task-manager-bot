@@ -1,59 +1,86 @@
 import sqlite3
 
 
-class Db:   
-    
-    
+class Database:     
     def __init__(self, db_file):
         self.connection = sqlite3.connect(db_file)
         self.cursor = self.connection.cursor()
+        # db tables
+        self.roles = 'roles'
+        self.statuses = 'statuses'
+        self.tasks = 'tasks'
+        self.users = 'users'
 
   
-    def get_users(self):
+    def get_users(self, role = 1):
         with self.connection:
-            return self.cursor.execute("SELECT * FROM `users` WHERE `customer` = ? AND `admin` = ?", (False, False)).fetchall()
+            return self.cursor.execute(f"SELECT * FROM `{self.users}` WHERE `role` = ?", (role,)).fetchall()
 
-
-    def get_customers(self):
+ 
+    # Is user exists
+    def user_exists(self, user_id, role = 1):
         with self.connection:
-            return self.cursor.execute("SELECT * FROM `users` WHERE `customer` = ?", (True,)).fetchall()
-    
-
-    def get_admins(self):
-        with self.connection:
-            return self.cursor.execute("SELECT * FROM `user` WHERE `admin` = ?", (True,)).fetchall()
-
-    
-    # Is user exists in db
-    def user_is_customer(self, user_id):
-        with self.connection:
-            return self.cursor.execute("SELECT * FROM `users` WHERE `id` = ? AND `customer` = ?", (user_id, True)).fetchall()
+            return self.cursor.execute(f"SELECT * FROM `{self.users}` WHERE `id` = ? AND `role` = ?", (user_id, role)).fetchall()
 
 
-    # Add user to db
-    def add_user(self, user_id, username, customer = False):
-        with self.connection:
-            return self.cursor.execute("INSERT INTO `users` (`id`, `username`, `customer`) VALUES (?,?,?)", (user_id, username, customer))
-
-    
     # Add task
     def add_task(self, task, user_id):
         with self.connection:
-            return self.cursor.execute("INSERT INTO `tasks` (`task`, `customer`) VALUES (?,?)", (task, user_id))
+            return self.cursor.execute(f"INSERT INTO `{self.tasks}` (`task`, `customer`) VALUES (?,?)", (task, user_id)), self.cursor.lastrowid
 
     
     # Update status
     def update_status(self, task_id, status_id):
         with self.connection:
-            return self.cursor.execute("UPDATE `tasks` SET `status` = ? WHERE `id` = ?", (status_id, task_id))
+            return self.cursor.execute(f"UPDATE `{self.tasks}` SET `status` = ? WHERE `id` = ?", (status_id, task_id))
 
 
     # Get statuses
-    def get_statuses(self, all_except_first = False):
+    def get_statuses(self, except_status):
         with self.connection:
-            return self.cursor.execute("SELECT * FROM `statuses` WHERE `id` != ?", (all_except_first,)).fetchall()
+            return self.cursor.execute(f"SELECT * FROM `{self.statuses}` WHERE `id` != ?", (except_status,)).fetchall()
+
+
+    def get_tasks(self, status = 1):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.tasks}` WHERE `status` == ? ORDER BY `id` DESC", (status,)).fetchall()
 
     
+    def get_task(self, task_id):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.tasks}` WHERE `id` == ?", (task_id,)).fetchall()
+    
+    
+    def get_tasks_except_completed(self):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.tasks}` WHERE `status` != ?", (3,)).fetchall()
+
+    
+    def get_status(self, status_id):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.statuses}` WHERE `id` == ?", (status_id,)).fetchall()
+
+    
+    def get_status_name(self, status_id):
+        with self.connection:
+            return self.cursor.execute(f"SELECT `status` FROM `{self.statuses}` WHERE `id` = ?", (status_id,)).fetchall()
+
+
+    def get_status_by_name(self, name):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.statuses}` WHERE `status` = ?", (name,)).fetchall()
+
+
+    def task_exists(self, task_id):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.tasks}` WHERE `id` = ?", (task_id,)).fetchall()
+
+
+    def status_exists_by_name(self, name):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.statuses}` WHERE `status` = ?", (name,)).fetchall()
+
+
     # Close connection with db
     def close(self):
         self.connection.close()
