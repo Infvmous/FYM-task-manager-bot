@@ -1,6 +1,7 @@
 from aiogram.types import CallbackQuery
-from loader import dp, db
+from loader import dp, db, bot
 from helper import remove_special_symbols
+from config import CHANNEL_ID
 
 import logging
 
@@ -21,8 +22,9 @@ async def process_callback_status(call: CallbackQuery):
     username = callback_data[3] 
     # Ответ на нажатие Inline кнопки
     if db.update_status(task_id, status_id):
-        await call.message.answer(f'@{username} установил статус "{status}"" для задачи "{task}"')
-    
+        msg = f'@{username} установил статус "{status}"" для задачи "{task}"'
+        await call.message.answer(msg)
+        await bot.send_message(CHANNEL_ID, msg)
 
 
 '''

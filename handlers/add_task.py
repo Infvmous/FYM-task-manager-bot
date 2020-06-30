@@ -34,6 +34,7 @@ async def add_task_step_2(message: Message, state: FSMContext):
     if task_added:
         await message.answer(f'✔️ Задача "{task}" успешно создана')
         await send_message_to_telegram(task, username, task_id) # Send message to TG channel
+        await send_message_to_telegram(task, username, task_id, False) # Send to all users
     else:
         await message.answer(f'❌ Задача "{task}" не была создана')
     await state.finish()
