@@ -19,4 +19,4 @@ async def send_message_to_telegram(task, username, task_id, to_channel = True):
         users = db.get_users()
         for user in users:
             await bot.send_message(user[0], msg,
-                reply_markup=await statuses_keyboard(task_id, username))
+                reply_markup=await statuses_keyboard(task_id))
