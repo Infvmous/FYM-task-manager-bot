@@ -17,6 +17,12 @@ class Database:
             return self.cursor.execute(f"SELECT * FROM `{self.users}` WHERE `role` = ?", (role,)).fetchall()
 
  
+    def add_user(self, user_id, username, full_name, role):
+         with self.connection:
+            if self.user_exists(user_id): return self.cursor.execute(f"UPDATE `{self.users}` SET `username` = ?, `full_name` = ?, `role` = ? WHERE `id` = ?", (username, full_name, role, user_id))  
+            else: return self.cursor.execute(f"INSERT INTO `{self.users}` (`id`, `username`, `full_name`, `role`) VALUES (?,?,?,?)", (user_id, username, full_name, role))
+    
+
     # Is user exists
     def user_exists(self, user_id, role = 1):
         with self.connection:
@@ -79,6 +85,16 @@ class Database:
     def status_exists_by_name(self, name):
         with self.connection:
             return self.cursor.execute(f"SELECT * FROM `{self.statuses}` WHERE `status` = ?", (name,)).fetchall()
+
+
+    def get_roles(self):
+        with self.connection:
+            return self.cursor.execute(f"SELECT * FROM `{self.roles}`").fetchall()
+
+    
+    def get_role(self, role_id):
+        with self.connection:
+            return str(self.cursor.execute(f"SELECT `role` FROM `{self.roles}` WHERE `id` = ?", (role_id,)).fetchall())
 
 
     # Close connection with db

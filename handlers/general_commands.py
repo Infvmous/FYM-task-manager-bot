@@ -8,14 +8,18 @@ async def start(message: types.Message):
     if db.user_exists(user_id, 2):
         await message.answer('Добавить новую задачу /add')   
     elif db.user_exists(user_id, 3):
-        await message.answer('Админ')
+        admin_commands = """
+Добавить новую задачу /add
+Добавить пользователя /user"""
+        await message.answer(admin_commands)
     elif db.user_exists(user_id, 1):
         await message.answer('✔️ Доступ получен, права фармера')
         user_commands = """
 Обновить статус задачи /update
 Список новых задач /new
 Список задач в работе /inwork
-Список выполненных задач /done"""
+Список выполненных задач /done
+*** В РАЗРАБОТКЕ ***"""
         await message.answer(user_commands)
     else:
         await message.answer(f'Здравствуй @{message.chat.username} -> #{user_id}')

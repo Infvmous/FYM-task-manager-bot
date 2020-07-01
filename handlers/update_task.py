@@ -13,7 +13,7 @@ async def process_callback_status(call: CallbackQuery):
     callback_data = call.data.split(':')
     logging.info(f'call = {callback_data}')
     # Get status name
-    status_id = remove_special_symbols(callback_data[1])
+    status_id = await remove_special_symbols(callback_data[1])
     status = db.get_status(status_id)[0][1]
     # Get task name
     task_id = callback_data[2]
