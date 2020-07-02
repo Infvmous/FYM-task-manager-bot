@@ -1,7 +1,9 @@
 from aiogram.types import CallbackQuery
+
 from loader import dp, db, bot
-from helper import remove_special_symbols
 from config import CHANNEL_ID
+
+from misc.helper import remove_special_symbols
 
 import logging
 

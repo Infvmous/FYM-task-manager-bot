@@ -3,11 +3,12 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 
 from loader import dp, db, bot
-from helper import send_message_to_telegram, remove_special_symbols, \
-    collect_string_in_dict
 from config import CHANNEL_ID
-from states import AddUser
-from roles import roles_dict
+
+from misc.states import AddUser
+from misc.roles import roles_dict
+from misc.helper import send_message_to_telegram, remove_special_symbols, \
+    collect_string_in_dict
 
 import logging
 import re

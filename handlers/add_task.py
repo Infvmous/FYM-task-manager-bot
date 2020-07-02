@@ -3,8 +3,9 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 
 from loader import dp, db, bot
-from states import AddTask
-from helper import send_message_to_telegram
+
+from misc.states import AddTask
+from misc.helper import send_message_to_telegram
 
 
 # /add - wait for task description

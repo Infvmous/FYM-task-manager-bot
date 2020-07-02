@@ -3,7 +3,8 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from db import Database as Db
+
+from database.db import Database as Db
 
 
 # Setup lvl of logs
