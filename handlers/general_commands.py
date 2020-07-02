@@ -22,4 +22,4 @@ async def start(message: types.Message):
 *** В РАЗРАБОТКЕ ***"""
         await message.answer(user_commands)
     else:
-        await message.answer(f'Здравствуй @{message.chat.username} -> #{user_id}')
+        await message.answer(f'{user_id}:{message.chat.username}:{message.chat.full_name}')

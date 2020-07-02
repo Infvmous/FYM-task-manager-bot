@@ -5,7 +5,14 @@ from keyboards.inline.callback_data import status_callback
 
 
 async def statuses_keyboard(task_id):
-    # Get all statuses from db
+    """ Generate inline keyboard with statuses from database
+
+    Args:
+        task_id (int): task id
+
+    Returns:
+        markup[?]: iniline keybaord markup with statuses
+    """
     statuses = db.get_statuses(True)
     keyboard = InlineKeyboardMarkup(row_width=2)
     for status in statuses:
