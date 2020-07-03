@@ -7,12 +7,6 @@ class Database:
         self.conn = None
         self.cur = None
         if name: self.open(name)
-        self.accs = 'accounts'
-        self.groups = 'groups'
-        self.stats = 'statuses'
-        self.tasks = 'tasks'
-        self.types = 'types'
-        self.users = 'users'
 
 
     def open(self, name):
@@ -39,11 +33,20 @@ class Database:
         self.close()
     
 
-    def get_user(self, user_id):
+    def get_all(self, table):
         with self.conn:
-            query = f"SELECT * FROM {self.users}\
-                    WHERE `external_id` = ?"
-            return self.cur.execute(query, (user_id,)).fetchone()
+            query = "SELECT * FROM {0}".format(table)
+            return self.cur.execute(query).fetchall()
+    
+    
+    def get_where(self, table, value, row = 'id'):
+        with self.conn:
+            query = "SELECT * FROM {0}\
+                    WHERE {1} = ?".format(table, row)
+            return self.cur.execute(query, (value,)).fetchone()
+    
+
+    
 
 
 
