@@ -39,12 +39,41 @@ class Database:
             return self.cur.execute(query).fetchall()
     
     
-    def get_where(self, table, value, row = 'id'):
+    def get(self, table, value, column = '*', row = 'id'):
         with self.conn:
-            query = "SELECT * FROM {0}\
-                    WHERE {1} = ?".format(table, row)
+            query = "SELECT {0} FROM {1}\
+                    WHERE {2} = ?".format(column, table, row)
             return self.cur.execute(query, (value,)).fetchone()
+
+
+    def update(self, table, value1, row1, value2, row2 = 'id'):
+        with self.conn:
+            query = "UPDATE {0}\
+                    SET {1} = ?\
+                    WHERE {2} = ?".format(table, row1, row2)
+            return self.cur.execute(query, (value1, value2))
     
+
+    def add_task(self, name, user_id, date, task_type = 6):
+        with self.conn:
+            query = f"INSERT INTO `tasks`\
+                    (`name`, `customer`, `type`, `date`)\
+                    VALUES (?,?,?,?)"
+            return self.cur.execute(query, (name, user_id, task_type, date)), self.cur.lastrowid
+    
+
+    def get_users(self, group = 1):
+        with self.conn:
+            query = "SELECT * FROM `users`\
+                    WHERE `group` = ?"
+            return self.cur.execute(query, (group,)).fetchall()
+    
+
+    def get_task_statuses(self, except_status):
+        with self.conn:
+            query = "SELECT * FROM `task_statuses`\
+                    WHERE `id` != ?"
+            return self.cur.execute(query, (except_status,)).fetchall()
 
     
 
